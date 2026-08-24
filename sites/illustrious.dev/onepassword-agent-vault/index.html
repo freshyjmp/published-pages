@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="A concise, security-first guide to giving Codex, Claude Code, and Oh My Pi least-privileged access to 1Password secrets.">
   <meta name="robots" content="index,follow">
+  <link rel="describedby" href="./llms.txt">
   <title>1Password for coding agents — a quick, safe setup</title>
   <style>
     @font-face { font-family: "Route Display"; src: url("./barlow-condensed-700.ttf") format("truetype"); font-weight: 700; font-display: swap; }
@@ -16,10 +17,10 @@
       --muted: #4b5a53;
       --paper: #f4f7f5;
       --panel: #ffffff;
-      --line: #007a5a;
-      --blue: #1769e0;
-      --orange: #d94f2b;
-      --yellow: #f2c94c;
+      --line: #2f6f5d;
+      --blue: #365f8d;
+      --orange: #9a624f;
+      --yellow: #d8c982;
       --rule: #cbd5d0;
       --code: #14211b;
       --code-ink: #ecf7f1;
@@ -38,69 +39,72 @@
     .skip-link { position: fixed; z-index: 20; top: .75rem; left: .75rem; padding: .65rem 1rem; color: white; background: var(--focus); transform: translateY(-180%); }
     .skip-link:focus { transform: translateY(0); }
 
-    .masthead { position: relative; overflow: hidden; min-height: 720px; color: white; background: var(--ink); }
-    .masthead::before { content: ""; position: absolute; inset: 0; opacity: .18; background-image: radial-gradient(circle at 1px 1px, #fff 1px, transparent 0); background-size: 18px 18px; mask-image: linear-gradient(to bottom, black, transparent 80%); }
-    .masthead-inner { position: relative; width: min(1180px, calc(100% - 2rem)); margin: 0 auto; padding: 2rem 0 5rem; }
+    .masthead { position: relative; overflow: hidden; min-height: 520px; color: white; background: #17231e; }
+    .masthead::before { display: none; }
+    .masthead-inner { position: relative; width: min(1120px, calc(100% - 2rem)); margin: 0 auto; padding: 1.5rem 0 2.75rem; }
     .brandline { display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-family: var(--display); font-size: .95rem; letter-spacing: .08em; text-transform: uppercase; }
     .brandline a { color: white; }
     .service-badge { display: inline-flex; gap: .5rem; align-items: center; }
     .service-badge::before { content: ""; width: .7rem; height: .7rem; border: 3px solid white; border-radius: 50%; background: var(--line); }
 
-    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(320px, .8fr); gap: clamp(2rem, 7vw, 7rem); align-items: end; padding-top: clamp(5rem, 12vw, 9rem); }
-    h1 { max-width: 760px; margin: 0; font-family: var(--display); font-size: clamp(4.2rem, 10vw, 8.4rem); font-weight: 700; line-height: .79; letter-spacing: -.035em; text-transform: uppercase; text-wrap: balance; }
-    .hero-copy { max-width: 36rem; margin: 0 0 .3rem; font-size: clamp(1.15rem, 2vw, 1.42rem); color: #d9e5df; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(320px, .8fr); gap: clamp(2rem, 5vw, 4rem); align-items: end; padding-top: clamp(3rem, 7vw, 5rem); }
+    h1 { max-width: 700px; margin: 0; font-family: var(--display); font-size: clamp(3.2rem, 7vw, 5.6rem); font-weight: 700; line-height: .9; letter-spacing: -.025em; text-wrap: balance; }
+    .hero-copy { max-width: 36rem; margin: 0 0 .3rem; font-size: clamp(1.08rem, 1.6vw, 1.3rem); color: #d9e5df; }
     .hero-copy strong { color: white; }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
-    .action { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: .65rem 1.05rem; border: 2px solid white; color: var(--ink); background: white; font-weight: 700; text-decoration: none; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.4rem; }
+    .action { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: .55rem .9rem; border: 1px solid white; color: var(--ink); background: white; font-weight: 700; text-decoration: none; }
     .action.secondary { color: white; background: transparent; }
     .action:hover { color: white; background: var(--line); }
 
-    .hero-route { position: relative; margin-top: 5.5rem; padding-top: 2.5rem; }
-    .hero-route::before { content: ""; position: absolute; top: .72rem; right: 0; left: 0; height: .62rem; background: var(--line); }
+    .hero-route { position: relative; margin-top: 3rem; padding-top: 1.8rem; }
+    .hero-route::before { content: ""; position: absolute; top: .58rem; right: 0; left: 0; height: .28rem; background: var(--line); }
     .route-stops { display: grid; grid-template-columns: repeat(5, 1fr); gap: .5rem; margin: 0; padding: 0; list-style: none; }
-    .route-stops li { position: relative; padding-top: .4rem; font-family: var(--display); font-size: .9rem; line-height: 1.05; letter-spacing: .04em; text-transform: uppercase; }
-    .route-stops li::before { content: ""; position: absolute; top: -2.42rem; left: 0; width: 1.18rem; height: 1.18rem; border: .34rem solid white; border-radius: 50%; background: var(--line); }
+    .route-stops li { position: relative; padding-top: .3rem; font-family: var(--display); font-size: .8rem; line-height: 1.05; letter-spacing: .035em; text-transform: uppercase; }
+    .route-stops li::before { content: ""; position: absolute; top: -1.77rem; left: 0; width: .78rem; height: .78rem; border: .22rem solid white; border-radius: 50%; background: var(--line); }
 
-    .truth-strip { color: var(--ink); background: var(--yellow); }
-    .truth-strip p { width: min(1180px, calc(100% - 2rem)); margin: 0 auto; padding: 1rem 0; font-weight: 700; }
+    .truth-strip { color: var(--ink); border-bottom: 1px solid var(--rule); background: #e7ece9; }
+    .truth-strip p { width: min(1120px, calc(100% - 2rem)); margin: 0 auto; padding: .8rem 0; font-weight: 700; }
 
     .station-nav { position: sticky; z-index: 10; top: 0; display: flex; overflow-x: auto; gap: 0; border-bottom: 1px solid var(--rule); background: rgba(244, 247, 245, .96); scrollbar-width: thin; }
     .station-nav a { flex: 1 0 auto; min-width: 138px; padding: .75rem 1rem; border-right: 1px solid var(--rule); color: var(--ink); font-family: var(--display); font-size: .94rem; letter-spacing: .035em; text-align: center; text-decoration: none; text-transform: uppercase; }
     .station-nav a:hover { color: white; background: var(--line); }
 
-    main { width: min(1120px, calc(100% - 2rem)); margin: 0 auto; padding: 5rem 0 7rem; }
-    .intro { display: grid; grid-template-columns: 1fr 2fr; gap: clamp(2rem, 8vw, 8rem); margin-bottom: 6rem; }
-    .intro h2, .station h2, .application h2 { margin: 0; font-family: var(--display); font-size: clamp(2.8rem, 6vw, 5rem); line-height: .9; letter-spacing: -.025em; text-transform: uppercase; text-wrap: balance; }
-    .intro p { max-width: 66ch; margin: 0; font-size: 1.22rem; }
+    main { width: min(1060px, calc(100% - 2rem)); margin: 0 auto; padding: 4rem 0 5rem; }
+    .agent-prompt { margin-bottom: 4rem; padding-bottom: 4rem; border-bottom: 1px solid var(--rule); }
+    .agent-prompt h2, .intro h2, .station h2, .application h2 { margin: 0; font-family: var(--display); font-size: clamp(2.35rem, 4vw, 3.6rem); line-height: .95; letter-spacing: -.02em; text-wrap: balance; }
+    .agent-prompt > p { max-width: 68ch; margin: .7rem 0 1.5rem; color: var(--muted); }
+    .agent-prompt .code-block { max-width: none; }
+    .intro { display: grid; grid-template-columns: 1fr 2fr; gap: clamp(2rem, 6vw, 6rem); margin-bottom: 4rem; }
+    .intro p { max-width: 66ch; margin: 0; font-size: 1.08rem; }
 
     .route { position: relative; }
-    .route::before { content: ""; position: absolute; top: 1rem; bottom: 0; left: 54px; width: 10px; background: var(--line); }
-    .station { --station-color: var(--line); position: relative; display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: clamp(1.5rem, 5vw, 4.5rem); padding-bottom: 6.5rem; }
+    .route::before { content: ""; position: absolute; top: 1rem; bottom: 0; left: 54px; width: 4px; background: var(--line); }
+    .station { --station-color: var(--line); position: relative; display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3.5rem); padding-bottom: 4.5rem; }
     .station:nth-child(2) { --station-color: var(--blue); }
-    .station:nth-child(3) { --station-color: var(--orange); }
+    .station:nth-child(3) { --station-color: var(--line); }
     .station:nth-child(4) { --station-color: var(--line); }
     .station:nth-child(5) { --station-color: var(--blue); }
-    .station::before { content: ""; position: absolute; z-index: 2; top: .25rem; left: 38px; width: 24px; height: 24px; border: 9px solid var(--paper); border-radius: 50%; background: var(--station-color); box-shadow: 0 0 0 4px var(--station-color); }
-    .station-number { position: relative; z-index: 3; padding-top: 3.4rem; font-family: var(--display); font-size: 1rem; letter-spacing: .08em; text-align: center; text-transform: uppercase; }
+    .station::before { content: ""; position: absolute; z-index: 2; top: .25rem; left: 42px; width: 16px; height: 16px; border: 6px solid var(--paper); border-radius: 50%; background: var(--station-color); box-shadow: 0 0 0 3px var(--station-color); }
+    .station-number { position: relative; z-index: 3; padding-top: 2.8rem; font-family: var(--display); font-size: .9rem; letter-spacing: .07em; text-align: center; text-transform: uppercase; }
     .station-body { min-width: 0; }
     .station-body > p, .station-body > ul { max-width: 70ch; }
-    .station-body h3 { margin: 2.6rem 0 .5rem; font-size: 1.35rem; line-height: 1.2; }
+    .station-body h3 { margin: 2rem 0 .5rem; font-size: 1.3rem; line-height: 1.2; }
     .station-body ul { padding-left: 1.25rem; }
     .station-body li + li { margin-top: .45rem; }
-    .station-summary { margin: .8rem 0 1.8rem; color: var(--muted); font-size: 1.17rem; }
+    .station-summary { margin: .65rem 0 1.5rem; color: var(--muted); font-size: 1.1rem; }
 
     .steps { margin: 1.5rem 0; padding: 0; counter-reset: substep; list-style: none; }
     .steps li { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr); gap: .8rem; padding: .7rem 0; border-top: 1px solid var(--rule); }
-    .steps li::before { counter-increment: substep; content: counter(substep); display: grid; width: 1.8rem; height: 1.8rem; place-items: center; border-radius: 50%; color: white; background: var(--ink); font-family: var(--display); font-size: .88rem; }
+    .steps li::before { counter-increment: substep; content: counter(substep); display: grid; width: 1.8rem; height: 1.8rem; place-items: center; border-radius: 50%; color: white; background: var(--ink); font-family: var(--display); font-size: .9rem; }
 
-    .notice { max-width: 72ch; margin: 1.5rem 0; padding: 1.05rem 1.15rem; border: 1px solid #ae7f00; background: #fff5c7; }
+    .notice { max-width: 72ch; margin: 1.5rem 0; padding: 1rem 1.1rem; border: 1px solid #c7b979; background: #f6f3df; }
     .notice strong { display: block; margin-bottom: .2rem; }
     .boundary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; max-width: 800px; margin: 2rem 0; border: 1px solid var(--rule); background: var(--rule); }
     .boundary > div { padding: 1.3rem; background: var(--panel); }
     .boundary h3 { margin-top: 0; }
 
     .code-block { position: relative; max-width: 880px; margin: 1.2rem 0 1.8rem; border: 1px solid #293c33; color: var(--code-ink); background: var(--code); }
-    .code-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 42px; padding: .45rem .65rem .45rem 1rem; border-bottom: 1px solid #3c5147; color: #b9cdc3; font-family: var(--display); font-size: .86rem; letter-spacing: .06em; text-transform: uppercase; }
+    .code-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 42px; padding: .45rem .65rem .45rem 1rem; border-bottom: 1px solid #3c5147; color: #b9cdc3; font-family: var(--display); font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; }
     pre { overflow-x: auto; margin: 0; padding: 1.1rem; font: .9rem/1.65 var(--mono); tab-size: 2; }
     code { font-family: var(--mono); }
     :not(pre) > code { padding: .08em .3em; border: 1px solid #becac4; background: #e9eeeb; font-size: .88em; overflow-wrap: anywhere; }
@@ -108,8 +112,8 @@
     .copy-button:hover { color: var(--ink); background: white; }
     .copy-button[data-state="copied"] { color: var(--ink); background: var(--yellow); }
 
-    .naming-map { display: grid; grid-template-columns: repeat(3, 1fr); max-width: 780px; margin: 1.7rem 0; border: 2px solid var(--ink); }
-    .naming-map div { position: relative; padding: 1rem; border-right: 2px solid var(--ink); background: white; }
+    .naming-map { display: grid; grid-template-columns: repeat(3, 1fr); max-width: 780px; margin: 1.7rem 0; border: 1px solid var(--ink); }
+    .naming-map div { position: relative; padding: 1rem; border-right: 1px solid var(--ink); background: white; }
     .naming-map div:last-child { border-right: 0; }
     .naming-map span { display: block; color: var(--muted); font-family: var(--display); font-size: .8rem; letter-spacing: .07em; text-transform: uppercase; }
     .naming-map strong { font-family: var(--mono); font-size: .95rem; }
@@ -120,39 +124,39 @@
     details { max-width: 880px; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); }
     summary { padding: .8rem 0; font-weight: 700; cursor: pointer; }
 
-    .application { margin-top: 1rem; padding: clamp(2rem, 6vw, 5rem); color: white; background: var(--blue); }
+    .application { margin-top: 0; padding: 3rem 0; border-top: 2px solid var(--blue); color: var(--ink); background: transparent; }
     .application h2 { max-width: 800px; }
-    .application > p { max-width: 68ch; color: #e2ecff; }
-    .application-copy { margin-top: 2rem; padding: clamp(1.3rem, 3vw, 2.2rem); color: var(--ink); background: white; }
+    .application > p { max-width: 68ch; color: var(--muted); }
+    .application-copy { margin-top: 1.5rem; padding: 1.4rem; border: 1px solid var(--rule); color: var(--ink); background: white; }
     .application-copy p { max-width: 72ch; margin: 0; }
-    .application .copy-button { margin-top: 1rem; border-color: white; }
-    .placeholder-note { margin-top: 1rem; color: #fff2bd; font-size: .95rem; font-weight: 700; }
+    .application .copy-button { margin-top: 1rem; border-color: var(--ink); color: var(--ink); }
+    .placeholder-note { margin-top: 1rem; color: #735d13; font-size: .95rem; font-weight: 700; }
 
-    .sources { margin-top: 5rem; padding-top: 2rem; border-top: 2px solid var(--ink); }
-    .sources h2 { font: 700 2rem/1 var(--display); text-transform: uppercase; }
+    .sources { margin-top: 3.5rem; padding-top: 2rem; border-top: 1px solid var(--ink); }
+    .sources h2 { font: 700 2rem/1 var(--display); }
     .sources ul { max-width: 74ch; }
-    footer { padding: 2rem 1rem 3rem; color: #d5e0da; background: var(--ink); text-align: center; }
+    footer { padding: 2rem 1rem; color: #d5e0da; background: #17231e; text-align: center; }
 
     @media (max-width: 760px) {
       .masthead { min-height: auto; }
       .hero-grid, .intro { grid-template-columns: 1fr; }
-      .hero-grid { padding-top: 4.5rem; }
-      h1 { font-size: clamp(4rem, 20vw, 6.4rem); }
-      .hero-route { margin-top: 4rem; }
+      .hero-grid { padding-top: 2.5rem; }
+      h1 { font-size: clamp(3.2rem, 15vw, 5.6rem); }
+      .hero-route { margin-top: 2.5rem; }
       .route-stops { grid-template-columns: repeat(5, 108px); overflow-x: auto; padding-bottom: .5rem; }
       .hero-route::before { width: 560px; }
-      main { padding-top: 3.5rem; }
-      .intro { gap: 1.2rem; margin-bottom: 4rem; }
-      .route::before { left: 24px; width: 7px; }
-      .station { grid-template-columns: 50px minmax(0, 1fr); gap: 1rem; padding-bottom: 5rem; }
-      .station::before { left: 14px; width: 18px; height: 18px; border-width: 6px; box-shadow: 0 0 0 3px var(--station-color); }
-      .station-number { overflow: hidden; width: 46px; padding-top: 2.7rem; font-size: .75rem; }
+      main { padding-top: 2.75rem; }
+      .intro { gap: 1.2rem; margin-bottom: 3rem; }
+      .route::before { left: 24px; width: 4px; }
+      .station { grid-template-columns: 50px minmax(0, 1fr); gap: 1rem; padding-bottom: 4rem; }
+      .station::before { left: 17px; width: 14px; height: 14px; border-width: 5px; box-shadow: 0 0 0 2px var(--station-color); }
+      .station-number { overflow: hidden; width: 46px; padding-top: 2.35rem; font-size: .8rem; }
       .boundary { grid-template-columns: 1fr; }
       .naming-map { grid-template-columns: 1fr; }
       .naming-map div { border-right: 0; border-bottom: 2px solid var(--ink); }
       .naming-map div:last-child { border-bottom: 0; }
-      pre { font-size: .78rem; }
-      .application { margin-right: -1rem; margin-left: -1rem; }
+      pre { font-size: .8rem; }
+      .application { margin-right: 0; margin-left: 0; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -163,10 +167,10 @@
 </head>
 <body>
   <!--
-  THESIS: Secrets move through references, not prompts; a transit line makes scope and sequence visible without imitating a terminal dashboard.
-  OWN-WORLD: Cool station white, black wayfinding ink, route green, transfer blue, warning yellow; condensed station lettering, hyperlegible reading text, and circular route marks.
-  FIRST-VIEW: An oversized directive sits over a five-stop line so the full setup is understood before scrolling.
-  SIGNATURE: One continuous route connects vault, service account, shell, namespace, and agent; each stop resolves one security boundary.
+  THESIS: Secrets move through references, not prompts; a restrained route makes scope and sequence visible without turning a quick guide into a campaign.
+  OWN-WORLD: Cool station white, deep green ink, muted route green and transfer blue; condensed station lettering, hyperlegible reading text, and small circular route marks.
+  FIRST-VIEW: A concise directive and five-stop line establish the complete setup without dominating the page.
+  SIGNATURE: One quiet route connects vault, service account, shell, namespace, and agent; each stop resolves one security boundary.
   RESPONSIVE: The line becomes a compact vertical route on narrow screens; code scrolls independently; all motion is optional. Seed 455212ff.
   -->
   <a class="skip-link" href="#main">Skip to the guide</a>
@@ -182,8 +186,8 @@
         <div>
           <p class="hero-copy">Give Codex, Claude Code, or Oh My Pi a <strong>least-privileged 1Password service account</strong>—not your personal vault and never a pasted credential.</p>
           <div class="hero-actions">
-            <a class="action" href="#vault">Start the setup</a>
-            <a class="action secondary" href="./bootstrap-agent-vault.sh" download>Get the script</a>
+            <a class="action" href="#agent-prompt">Copy the agent prompt</a>
+            <a class="action secondary" href="#vault">Read the guide</a>
           </div>
         </div>
       </div>
@@ -204,16 +208,55 @@
   </div>
 
   <nav class="station-nav" aria-label="Guide sections">
+    <a href="#agent-prompt">Agent prompt</a>
     <a href="#vault">Vault</a>
     <a href="#account">Service account</a>
     <a href="#shell">Shell</a>
     <a href="#namespace">Namespace</a>
-    <a href="#agents">Agents</a>
+    <a href="#agents">Rules</a>
     <a href="#script">Script</a>
     <a href="#cj-copy">CJ copy</a>
   </nav>
 
   <main id="main">
+    <section class="agent-prompt" id="agent-prompt" aria-labelledby="agent-prompt-title">
+      <h2 id="agent-prompt-title">Paste this into your coding agent</h2>
+      <p>This is the fastest path. Your agent can inspect the project and guide the setup, while you keep every token and secret out of the conversation.</p>
+      <div class="code-block">
+        <div class="code-head"><span>Agent setup prompt</span><button class="copy-button" type="button" data-copy="setup-prompt">Copy prompt</button></div>
+        <pre id="setup-prompt"><code>Help me set up least-privileged 1Password access for this project.
+
+Security rules:
+- Never ask me to paste a token or secret into chat.
+- Never print, log, summarize, or commit secret values.
+- Use a dedicated vault and a narrowly scoped service account.
+- Default to read-only access. Add write access only if this project truly needs it.
+- Resolve secrets only when the consuming command runs.
+
+Workflow:
+1. Inspect this project and propose a namespace using
+   &lt;project&gt;/&lt;service&gt;/&lt;environment&gt;.
+2. Check that 1Password CLI 2.18.0+ and jq are installed.
+3. Guide me through creating a dedicated vault on 1Password.com.
+   Pause while I complete web-only steps.
+4. Guide me through creating a service account with access only to that vault.
+   Explain that its vault access and permissions cannot be changed later.
+5. Tell me to save the one-time token in my personal 1Password vault.
+6. Have me load it without shell history:
+   read -rsp "1Password service-account token: " OP_SERVICE_ACCOUNT_TOKEN
+   export OP_SERVICE_ACCOUNT_TOKEN
+   printf '\\n'
+7. Verify the session with `op user get --me` without revealing the token.
+8. Store items as API Credential records with semantic fields such as
+   credential, username, host, and port. Tag explicitly agent-safe.
+9. Add a short secrets policy to this project's AGENTS.md or equivalent.
+10. Show the exact `op run`, `op inject`, or `op read` command this project
+    should use. Do not create plaintext secret files.
+
+Do not make destructive changes. At the end, summarize vault name,
+item references, permissions, and checks performed—but never secret values.</code></pre>
+      </div>
+    </section>
     <section class="intro" aria-labelledby="quick-rundown">
       <h2 id="quick-rundown">The quick rundown</h2>
       <p>Create one vault as a trust boundary. Give one service account only the permissions it needs in that vault. Load its one-time token into the shell that launches your coding agent. Store secrets as predictable item references, and tell the agent to resolve those references only when a command needs them.</p>
@@ -422,4 +465,5 @@ op run --env-file=.env.agent -- omp</code></pre>
     });
   </script>
 </body>
+
 </html>

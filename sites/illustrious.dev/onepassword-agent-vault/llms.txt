@@ -1,0 +1,45 @@
+# 1Password for Coding Agents
+
+> A security-first setup guide for giving Codex, Claude Code, or Oh My Pi least-privileged access to one dedicated 1Password vault.
+
+Use this guide to help a user configure 1Password without exposing any token or secret in chat, logs, source control, command arguments, or plaintext files.
+
+Security rules:
+
+- Never ask the user to paste a token or secret into the conversation.
+- Use a dedicated vault; never expose the user's personal vault.
+- Use a narrowly scoped service account. Default to read-only access.
+- The required environment variable is `OP_SERVICE_ACCOUNT_TOKEN`.
+- Item titles use `<project>/<service>/<environment>`.
+- Prefer `op run`, `op inject`, or a single `op read` at execution time.
+- Treat `agent-safe` as an allow-list naming convention, not access control.
+- Never print, log, summarize, or commit secret values.
+
+Recommended workflow:
+
+1. Inspect the project and propose its project/service/environment namespace.
+2. Check for 1Password CLI 2.18.0 or later and `jq`.
+3. Guide the user through creating a dedicated vault on 1Password.com.
+4. Guide the user through creating a service account with access only to that vault. Explain that its access and permissions are immutable.
+5. Tell the user to save the one-time token in a personal vault that the service account cannot access.
+6. Have the user load the token through hidden shell input, not chat or shell history.
+7. Verify with `op user get --me` without revealing the token.
+8. Store secrets as API Credential items with semantic fields and namespaced titles.
+9. Add a secrets policy to the project's `AGENTS.md`, `CLAUDE.md`, or equivalent.
+10. Show the exact runtime secret-reference command the project should use.
+
+## Guide
+
+- [Human-readable setup guide](https://pages.illustrious.dev/onepassword-agent-vault/): Full walkthrough, copyable agent prompt, AGENTS.md policy, and Commission Junction application copy.
+- [Bootstrap shell script](https://pages.illustrious.dev/onepassword-agent-vault/bootstrap-agent-vault.sh): Validates a service-account session and creates one namespaced API Credential item through hidden input.
+
+## Primary sources
+
+- [Create and share vaults](https://support.1password.com/create-share-vaults/): Official 1Password vault creation instructions.
+- [Get started with service accounts](https://www.1password.dev/service-accounts/get-started): Official service-account permissions, token, and web wizard behavior.
+- [Use service accounts with 1Password CLI](https://www.1password.dev/service-accounts/use-with-1password-cli): Official environment variable and CLI requirements.
+- [Load secrets into scripts](https://www.1password.dev/cli/secrets-scripts): Official `op run`, `op read`, and `op inject` guidance.
+
+## Optional
+
+- [llms.txt proposal](https://llmstxt.org/): Format and path-coverage convention used by this file.

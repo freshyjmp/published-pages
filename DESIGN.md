@@ -5,19 +5,32 @@ colors:
   signal-ink: "#101613"
   station-paper: "#f4f7f5"
   panel-white: "#ffffff"
-  route-green: "#007a5a"
-  transfer-blue: "#1769e0"
-  warning-orange: "#d94f2b"
-  caution-yellow: "#f2c94c"
+  route-green: "#2f6f5d"
+  transfer-blue: "#365f8d"
+  warning-orange: "#9a624f"
+  caution-yellow: "#d8c982"
   secondary-ink: "#4b5a53"
   rule-gray: "#cbd5d0"
+  header-ink: "#17231e"
+  header-copy: "#d9e5df"
+  quiet-strip: "#e7ece9"
+  notice-rule: "#c7b979"
+  notice-surface: "#f6f3df"
+  notice-copy: "#735d13"
+  code-rule: "#293c33"
+  code-divider: "#3c5147"
+  code-muted: "#b9cdc3"
+  inline-rule: "#becac4"
+  inline-surface: "#e9eeeb"
+  control-rule: "#789084"
+  footer-copy: "#d5e0da"
 typography:
   display:
     fontFamily: "Route Display, Arial Narrow, sans-serif"
-    fontSize: "clamp(2.8rem, 6vw, 5rem)"
+    fontSize: "clamp(2.35rem, 4vw, 3.6rem)"
     fontWeight: 700
-    lineHeight: 0.9
-    letterSpacing: "-0.025em"
+    lineHeight: 0.95
+    letterSpacing: "-0.02em"
   body:
     fontFamily: "Guide Text, ui-sans-serif, system-ui, sans-serif"
     fontSize: "1.08rem"
@@ -28,15 +41,41 @@ typography:
     fontSize: "0.94rem"
     fontWeight: 700
     letterSpacing: "0.035em"
+  hero:
+    fontFamily: "Route Display, Arial Narrow, sans-serif"
+    fontSize: "clamp(3.2rem, 7vw, 5.6rem)"
+    fontWeight: 700
+    lineHeight: 0.9
+    letterSpacing: "-0.025em"
+  lead:
+    fontFamily: "Guide Text, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "clamp(1.08rem, 1.6vw, 1.24rem)"
+    fontWeight: 400
+    lineHeight: 1.62
+  title:
+    fontFamily: "Guide Text, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "1.3rem"
+    fontWeight: 700
+    lineHeight: 1.2
+  fine:
+    fontFamily: "Route Display, Arial Narrow, sans-serif"
+    fontSize: "0.8rem"
+    fontWeight: 700
+    lineHeight: 1.05
+  code:
+    fontFamily: "ui-monospace, SFMono-Regular, Consolas, monospace"
+    fontSize: "0.9rem"
+    fontWeight: 400
+    lineHeight: 1.65
 spacing:
   compact: "0.75rem"
   standard: "1rem"
-  section: "6.5rem"
+  section: "4.5rem"
 components:
   action-primary:
     backgroundColor: "{colors.panel-white}"
     textColor: "{colors.signal-ink}"
-    padding: "0.65rem 1.05rem"
+    padding: "0.55rem 0.9rem"
   action-download:
     backgroundColor: "{colors.signal-ink}"
     textColor: "{colors.panel-white}"
@@ -61,14 +100,14 @@ This is the default world for technical field guides, not a mandatory skin for e
 
 ## Colors
 
-The palette combines cool public-space neutrals with transit signal colors.
+The palette combines cool public-space neutrals with restrained transit signals.
 
-- **Signal Ink** (`#101613`): primary text, mastheads, and code surfaces.
+- **Signal Ink** (`#101613`): primary text and code surfaces.
 - **Station Paper** (`#f4f7f5`): reading background.
-- **Route Green** (`#007a5a`): primary path and positive movement.
-- **Transfer Blue** (`#1769e0`): secondary route and application section.
-- **Warning Orange** (`#d94f2b`): a change in security responsibility.
-- **Caution Yellow** (`#f2c94c`): security facts that must not be skipped.
+- **Route Green** (`#2f6f5d`): primary path and positive movement.
+- **Transfer Blue** (`#365f8d`): secondary route and section boundary.
+- **Warning Orange** (`#9a624f`): reserved for a change in security responsibility.
+- **Caution Yellow** (`#d8c982`): restrained confirmation and warning state.
 - **Rule Gray** (`#cbd5d0`): separators and route-table structure.
 
 **The Structural Color Rule.** A route color must encode sequence, transfer, or warning; it never decorates an otherwise generic container.
@@ -79,15 +118,15 @@ The palette combines cool public-space neutrals with transit signal colors.
 **Body Font:** Atkinson Hyperlegible, self-hosted as Guide Text.  
 **Code Font:** platform monospace stack.
 
-Display type behaves like station signage: compressed, direct, and uppercase. Body copy prioritizes character distinction and sustained reading.
+Display type behaves like station signage: compressed and direct, with uppercase reserved for labels. Body copy prioritizes character distinction and sustained reading.
 
 ## Layout
 
-Pages use a centered container no wider than 1180px. Long-form copy stays near 70 characters. Ordered guidance may use a continuous route: a compact horizontal overview followed by a vertical reading path. Below 760px, multi-column passages collapse, the route narrows, code scrolls inside its own frame, and navigation remains horizontally scrollable.
+Pages use a centered container no wider than 1120px, with the primary reading column capped at 1060px. Long-form copy stays near 70 characters. Ordered guidance may use a continuous route: a compact horizontal overview followed by a vertical reading path. Below 760px, multi-column passages collapse, the route narrows, code scrolls inside its own frame, and navigation remains horizontally scrollable.
 
 ## Elevation & Depth
 
-The system is flat by default. Depth comes from large color fields, borders, and overlapping route geometry rather than shadows.
+The system is flat by default. Depth comes from restrained color fields, hairline borders, and overlapping route geometry rather than shadows.
 
 ## Shapes
 
@@ -97,7 +136,7 @@ Primary surfaces use square corners. Circles are reserved for route stops, subst
 
 ### Actions
 
-Primary actions use square, 2px bordered fields with at least a 48px target height. Hover replaces the field with route green. Keyboard focus uses a visible 3px violet outline outside the control.
+Primary actions use square, 1px bordered fields with at least a 44px target height. Hover replaces the field with Route Green. Keyboard focus uses a visible 3px violet outline outside the control.
 
 ### Code blocks
 

@@ -10,8 +10,8 @@ related_targets: []
 - Mode: Read.
 - Audience: Technical creators, independent developers, and solo builders configuring Codex, Claude Code, or Oh My Pi.
 - Job: Establish least-privileged 1Password access without pasting secrets into prompts or exposing a personal vault.
-- Primary action: Follow the five-stop setup; secondary action: download the bootstrap script.
-- Proof and content: Current official 1Password documentation, exact CLI variable and commands, a reusable instruction snippet, and an auditable shell script.
+- Primary action: Copy the complete setup prompt into a coding agent; secondary action: read the five-stop explanation or download the bootstrap script.
+- Proof and content: Current official 1Password documentation, exact CLI variable and commands, a copyable agent setup prompt, a reusable instruction snippet, an auditable shell script, and scoped `llms.txt` guidance.
 - Constraints: No publisher-specific infrastructure, account identifiers, vault names, credentials, or unverifiable claims. Public page; illustrative values only.
 - Direction: Transit wayfinding. One continuous route connects vault, service account, shell, namespace, and agent contract.
 - Memorable moment: The complete security boundary reads as a five-stop line before the visitor scrolls.

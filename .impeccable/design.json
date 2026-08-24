@@ -4,9 +4,9 @@
   "title": "Design System: Illustrious Technical Field Guides",
   "extensions": {
     "colorMeta": {
-      "route-green": { "role": "primary", "displayName": "Route Green", "canonical": "#007a5a" },
-      "transfer-blue": { "role": "secondary", "displayName": "Transfer Blue", "canonical": "#1769e0" },
-      "caution-yellow": { "role": "tertiary", "displayName": "Caution Yellow", "canonical": "#f2c94c" },
+      "route-green": { "role": "primary", "displayName": "Route Green", "canonical": "#2f6f5d" },
+      "transfer-blue": { "role": "secondary", "displayName": "Transfer Blue", "canonical": "#365f8d" },
+      "caution-yellow": { "role": "tertiary", "displayName": "Caution Yellow", "canonical": "#d8c982" },
       "station-paper": { "role": "neutral", "displayName": "Station Paper", "canonical": "#f4f7f5" },
       "signal-ink": { "role": "neutral", "displayName": "Signal Ink", "canonical": "#101613" }
     },

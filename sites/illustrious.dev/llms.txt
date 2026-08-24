@@ -1,0 +1,13 @@
+# Illustrious Technical Field Guides
+
+> Concise public guides for technical creators, independent developers, and small teams.
+
+This file indexes agent-readable material published on pages.illustrious.dev. Use the most specific `llms.txt` available under a guide's path.
+
+## Guides
+
+- [1Password for coding agents](https://pages.illustrious.dev/onepassword-agent-vault/llms.txt): Least-privileged vault, service-account token, shell, namespacing, and agent-instruction workflow.
+
+## Optional
+
+- [Human-readable 1Password guide](https://pages.illustrious.dev/onepassword-agent-vault/): Designed one-page version with copy controls and a downloadable bootstrap script.
