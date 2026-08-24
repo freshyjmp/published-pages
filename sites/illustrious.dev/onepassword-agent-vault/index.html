@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A concise, security-first guide to giving Codex, Claude Code, and Oh My Pi least-privileged access to 1Password secrets.">
+  <meta name="robots" content="index,follow">
+  <title>1Password for coding agents — a quick, safe setup</title>
+  <style>
+    @font-face { font-family: "Route Display"; src: url("./barlow-condensed-700.ttf") format("truetype"); font-weight: 700; font-display: swap; }
+    @font-face { font-family: "Guide Text"; src: url("./atkinson-regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+    @font-face { font-family: "Guide Text"; src: url("./atkinson-bold.ttf") format("truetype"); font-weight: 700; font-display: swap; }
+
+    :root {
+      --ink: #101613;
+      --muted: #4b5a53;
+      --paper: #f4f7f5;
+      --panel: #ffffff;
+      --line: #007a5a;
+      --blue: #1769e0;
+      --orange: #d94f2b;
+      --yellow: #f2c94c;
+      --rule: #cbd5d0;
+      --code: #14211b;
+      --code-ink: #ecf7f1;
+      --focus: #5b2ccf;
+      --display: "Route Display", "Arial Narrow", sans-serif;
+      --body: "Guide Text", ui-sans-serif, system-ui, sans-serif;
+      --mono: ui-monospace, "SFMono-Regular", Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font-family: var(--body); font-size: 1.08rem; line-height: 1.62; }
+    a { color: var(--blue); text-underline-offset: .18em; text-decoration-thickness: .08em; }
+    a:hover { text-decoration-thickness: .14em; }
+    :focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
+    .skip-link { position: fixed; z-index: 20; top: .75rem; left: .75rem; padding: .65rem 1rem; color: white; background: var(--focus); transform: translateY(-180%); }
+    .skip-link:focus { transform: translateY(0); }
+
+    .masthead { position: relative; overflow: hidden; min-height: 720px; color: white; background: var(--ink); }
+    .masthead::before { content: ""; position: absolute; inset: 0; opacity: .18; background-image: radial-gradient(circle at 1px 1px, #fff 1px, transparent 0); background-size: 18px 18px; mask-image: linear-gradient(to bottom, black, transparent 80%); }
+    .masthead-inner { position: relative; width: min(1180px, calc(100% - 2rem)); margin: 0 auto; padding: 2rem 0 5rem; }
+    .brandline { display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-family: var(--display); font-size: .95rem; letter-spacing: .08em; text-transform: uppercase; }
+    .brandline a { color: white; }
+    .service-badge { display: inline-flex; gap: .5rem; align-items: center; }
+    .service-badge::before { content: ""; width: .7rem; height: .7rem; border: 3px solid white; border-radius: 50%; background: var(--line); }
+
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(320px, .8fr); gap: clamp(2rem, 7vw, 7rem); align-items: end; padding-top: clamp(5rem, 12vw, 9rem); }
+    h1 { max-width: 760px; margin: 0; font-family: var(--display); font-size: clamp(4.2rem, 10vw, 8.4rem); font-weight: 700; line-height: .79; letter-spacing: -.035em; text-transform: uppercase; text-wrap: balance; }
+    .hero-copy { max-width: 36rem; margin: 0 0 .3rem; font-size: clamp(1.15rem, 2vw, 1.42rem); color: #d9e5df; }
+    .hero-copy strong { color: white; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
+    .action { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: .65rem 1.05rem; border: 2px solid white; color: var(--ink); background: white; font-weight: 700; text-decoration: none; }
+    .action.secondary { color: white; background: transparent; }
+    .action:hover { color: white; background: var(--line); }
+
+    .hero-route { position: relative; margin-top: 5.5rem; padding-top: 2.5rem; }
+    .hero-route::before { content: ""; position: absolute; top: .72rem; right: 0; left: 0; height: .62rem; background: var(--line); }
+    .route-stops { display: grid; grid-template-columns: repeat(5, 1fr); gap: .5rem; margin: 0; padding: 0; list-style: none; }
+    .route-stops li { position: relative; padding-top: .4rem; font-family: var(--display); font-size: .9rem; line-height: 1.05; letter-spacing: .04em; text-transform: uppercase; }
+    .route-stops li::before { content: ""; position: absolute; top: -2.42rem; left: 0; width: 1.18rem; height: 1.18rem; border: .34rem solid white; border-radius: 50%; background: var(--line); }
+
+    .truth-strip { color: var(--ink); background: var(--yellow); }
+    .truth-strip p { width: min(1180px, calc(100% - 2rem)); margin: 0 auto; padding: 1rem 0; font-weight: 700; }
+
+    .station-nav { position: sticky; z-index: 10; top: 0; display: flex; overflow-x: auto; gap: 0; border-bottom: 1px solid var(--rule); background: rgba(244, 247, 245, .96); scrollbar-width: thin; }
+    .station-nav a { flex: 1 0 auto; min-width: 138px; padding: .75rem 1rem; border-right: 1px solid var(--rule); color: var(--ink); font-family: var(--display); font-size: .94rem; letter-spacing: .035em; text-align: center; text-decoration: none; text-transform: uppercase; }
+    .station-nav a:hover { color: white; background: var(--line); }
+
+    main { width: min(1120px, calc(100% - 2rem)); margin: 0 auto; padding: 5rem 0 7rem; }
+    .intro { display: grid; grid-template-columns: 1fr 2fr; gap: clamp(2rem, 8vw, 8rem); margin-bottom: 6rem; }
+    .intro h2, .station h2, .application h2 { margin: 0; font-family: var(--display); font-size: clamp(2.8rem, 6vw, 5rem); line-height: .9; letter-spacing: -.025em; text-transform: uppercase; text-wrap: balance; }
+    .intro p { max-width: 66ch; margin: 0; font-size: 1.22rem; }
+
+    .route { position: relative; }
+    .route::before { content: ""; position: absolute; top: 1rem; bottom: 0; left: 54px; width: 10px; background: var(--line); }
+    .station { --station-color: var(--line); position: relative; display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: clamp(1.5rem, 5vw, 4.5rem); padding-bottom: 6.5rem; }
+    .station:nth-child(2) { --station-color: var(--blue); }
+    .station:nth-child(3) { --station-color: var(--orange); }
+    .station:nth-child(4) { --station-color: var(--line); }
+    .station:nth-child(5) { --station-color: var(--blue); }
+    .station::before { content: ""; position: absolute; z-index: 2; top: .25rem; left: 38px; width: 24px; height: 24px; border: 9px solid var(--paper); border-radius: 50%; background: var(--station-color); box-shadow: 0 0 0 4px var(--station-color); }
+    .station-number { position: relative; z-index: 3; padding-top: 3.4rem; font-family: var(--display); font-size: 1rem; letter-spacing: .08em; text-align: center; text-transform: uppercase; }
+    .station-body { min-width: 0; }
+    .station-body > p, .station-body > ul { max-width: 70ch; }
+    .station-body h3 { margin: 2.6rem 0 .5rem; font-size: 1.35rem; line-height: 1.2; }
+    .station-body ul { padding-left: 1.25rem; }
+    .station-body li + li { margin-top: .45rem; }
+    .station-summary { margin: .8rem 0 1.8rem; color: var(--muted); font-size: 1.17rem; }
+
+    .steps { margin: 1.5rem 0; padding: 0; counter-reset: substep; list-style: none; }
+    .steps li { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr); gap: .8rem; padding: .7rem 0; border-top: 1px solid var(--rule); }
+    .steps li::before { counter-increment: substep; content: counter(substep); display: grid; width: 1.8rem; height: 1.8rem; place-items: center; border-radius: 50%; color: white; background: var(--ink); font-family: var(--display); font-size: .88rem; }
+
+    .notice { max-width: 72ch; margin: 1.5rem 0; padding: 1.05rem 1.15rem; border: 1px solid #ae7f00; background: #fff5c7; }
+    .notice strong { display: block; margin-bottom: .2rem; }
+    .boundary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; max-width: 800px; margin: 2rem 0; border: 1px solid var(--rule); background: var(--rule); }
+    .boundary > div { padding: 1.3rem; background: var(--panel); }
+    .boundary h3 { margin-top: 0; }
+
+    .code-block { position: relative; max-width: 880px; margin: 1.2rem 0 1.8rem; border: 1px solid #293c33; color: var(--code-ink); background: var(--code); }
+    .code-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 42px; padding: .45rem .65rem .45rem 1rem; border-bottom: 1px solid #3c5147; color: #b9cdc3; font-family: var(--display); font-size: .86rem; letter-spacing: .06em; text-transform: uppercase; }
+    pre { overflow-x: auto; margin: 0; padding: 1.1rem; font: .9rem/1.65 var(--mono); tab-size: 2; }
+    code { font-family: var(--mono); }
+    :not(pre) > code { padding: .08em .3em; border: 1px solid #becac4; background: #e9eeeb; font-size: .88em; overflow-wrap: anywhere; }
+    .copy-button { min-width: 76px; min-height: 32px; border: 1px solid #789084; color: white; background: transparent; font: 700 .78rem var(--body); cursor: pointer; }
+    .copy-button:hover { color: var(--ink); background: white; }
+    .copy-button[data-state="copied"] { color: var(--ink); background: var(--yellow); }
+
+    .naming-map { display: grid; grid-template-columns: repeat(3, 1fr); max-width: 780px; margin: 1.7rem 0; border: 2px solid var(--ink); }
+    .naming-map div { position: relative; padding: 1rem; border-right: 2px solid var(--ink); background: white; }
+    .naming-map div:last-child { border-right: 0; }
+    .naming-map span { display: block; color: var(--muted); font-family: var(--display); font-size: .8rem; letter-spacing: .07em; text-transform: uppercase; }
+    .naming-map strong { font-family: var(--mono); font-size: .95rem; }
+
+    .script-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin: 1.5rem 0; }
+    .download { display: inline-flex; min-height: 48px; align-items: center; padding: .65rem 1rem; border: 2px solid var(--ink); color: white; background: var(--ink); font-weight: 700; text-decoration: none; }
+    .download:hover { color: white; background: var(--line); }
+    details { max-width: 880px; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); }
+    summary { padding: .8rem 0; font-weight: 700; cursor: pointer; }
+
+    .application { margin-top: 1rem; padding: clamp(2rem, 6vw, 5rem); color: white; background: var(--blue); }
+    .application h2 { max-width: 800px; }
+    .application > p { max-width: 68ch; color: #e2ecff; }
+    .application-copy { margin-top: 2rem; padding: clamp(1.3rem, 3vw, 2.2rem); color: var(--ink); background: white; }
+    .application-copy p { max-width: 72ch; margin: 0; }
+    .application .copy-button { margin-top: 1rem; border-color: white; }
+    .placeholder-note { margin-top: 1rem; color: #fff2bd; font-size: .95rem; font-weight: 700; }
+
+    .sources { margin-top: 5rem; padding-top: 2rem; border-top: 2px solid var(--ink); }
+    .sources h2 { font: 700 2rem/1 var(--display); text-transform: uppercase; }
+    .sources ul { max-width: 74ch; }
+    footer { padding: 2rem 1rem 3rem; color: #d5e0da; background: var(--ink); text-align: center; }
+
+    @media (max-width: 760px) {
+      .masthead { min-height: auto; }
+      .hero-grid, .intro { grid-template-columns: 1fr; }
+      .hero-grid { padding-top: 4.5rem; }
+      h1 { font-size: clamp(4rem, 20vw, 6.4rem); }
+      .hero-route { margin-top: 4rem; }
+      .route-stops { grid-template-columns: repeat(5, 108px); overflow-x: auto; padding-bottom: .5rem; }
+      .hero-route::before { width: 560px; }
+      main { padding-top: 3.5rem; }
+      .intro { gap: 1.2rem; margin-bottom: 4rem; }
+      .route::before { left: 24px; width: 7px; }
+      .station { grid-template-columns: 50px minmax(0, 1fr); gap: 1rem; padding-bottom: 5rem; }
+      .station::before { left: 14px; width: 18px; height: 18px; border-width: 6px; box-shadow: 0 0 0 3px var(--station-color); }
+      .station-number { overflow: hidden; width: 46px; padding-top: 2.7rem; font-size: .75rem; }
+      .boundary { grid-template-columns: 1fr; }
+      .naming-map { grid-template-columns: 1fr; }
+      .naming-map div { border-right: 0; border-bottom: 2px solid var(--ink); }
+      .naming-map div:last-child { border-bottom: 0; }
+      pre { font-size: .78rem; }
+      .application { margin-right: -1rem; margin-left: -1rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+    }
+  </style>
+</head>
+<body>
+  <!--
+  THESIS: Secrets move through references, not prompts; a transit line makes scope and sequence visible without imitating a terminal dashboard.
+  OWN-WORLD: Cool station white, black wayfinding ink, route green, transfer blue, warning yellow; condensed station lettering, hyperlegible reading text, and circular route marks.
+  FIRST-VIEW: An oversized directive sits over a five-stop line so the full setup is understood before scrolling.
+  SIGNATURE: One continuous route connects vault, service account, shell, namespace, and agent; each stop resolves one security boundary.
+  RESPONSIVE: The line becomes a compact vertical route on narrow screens; code scrolls independently; all motion is optional. Seed 455212ff.
+  -->
+  <a class="skip-link" href="#main">Skip to the guide</a>
+
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="brandline">
+        <span class="service-badge">Agent secrets route</span>
+        <a href="#sources">Official sources</a>
+      </div>
+      <div class="hero-grid">
+        <h1>Keep secrets out of agent prompts.</h1>
+        <div>
+          <p class="hero-copy">Give Codex, Claude Code, or Oh My Pi a <strong>least-privileged 1Password service account</strong>—not your personal vault and never a pasted credential.</p>
+          <div class="hero-actions">
+            <a class="action" href="#vault">Start the setup</a>
+            <a class="action secondary" href="./bootstrap-agent-vault.sh" download>Get the script</a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-route" aria-label="Five-stop setup route">
+        <ol class="route-stops">
+          <li>Dedicated vault</li>
+          <li>Service account</li>
+          <li>Shell token</li>
+          <li>Namespaced items</li>
+          <li>Agent rules</li>
+        </ol>
+      </div>
+    </div>
+  </header>
+
+  <div class="truth-strip">
+    <p>The token is a key, not a username. Any process holding it can do everything that service account is allowed to do.</p>
+  </div>
+
+  <nav class="station-nav" aria-label="Guide sections">
+    <a href="#vault">Vault</a>
+    <a href="#account">Service account</a>
+    <a href="#shell">Shell</a>
+    <a href="#namespace">Namespace</a>
+    <a href="#agents">Agents</a>
+    <a href="#script">Script</a>
+    <a href="#cj-copy">CJ copy</a>
+  </nav>
+
+  <main id="main">
+    <section class="intro" aria-labelledby="quick-rundown">
+      <h2 id="quick-rundown">The quick rundown</h2>
+      <p>Create one vault as a trust boundary. Give one service account only the permissions it needs in that vault. Load its one-time token into the shell that launches your coding agent. Store secrets as predictable item references, and tell the agent to resolve those references only when a command needs them.</p>
+    </section>
+
+    <div class="route">
+      <section class="station" id="vault" aria-labelledby="vault-title">
+        <div class="station-number">Stop 1</div>
+        <div class="station-body">
+          <h2 id="vault-title">Create a dedicated vault online</h2>
+          <p class="station-summary">A vault should describe a trust boundary, not become another miscellaneous drawer.</p>
+          <ol class="steps">
+            <li><span>Sign in at <a href="https://start.1password.com/signin">1Password.com</a>.</span></li>
+            <li><span>On the Home page, choose <strong>New Vault</strong>.</span></li>
+            <li><span>Name it for the access boundary, such as <code>Agent Automation</code>, add a plain description, and select <strong>Create Vault</strong>.</span></li>
+            <li><span>Put only credentials an automated coding session genuinely needs in this vault.</span></li>
+          </ol>
+          <div class="notice">
+            <strong>Do not use a built-in personal vault.</strong>
+            1Password service accounts cannot access built-in Personal, Private, Employee, or default Shared vaults. A purpose-built vault also makes least privilege visible and auditable.
+          </div>
+        </div>
+      </section>
+
+      <section class="station" id="account" aria-labelledby="account-title">
+        <div class="station-number">Stop 2</div>
+        <div class="station-body">
+          <h2 id="account-title">Create the service account and copy its token</h2>
+          <p class="station-summary">This is the “vault key” used by headless tools. 1Password calls it a <strong>service account token</strong>.</p>
+          <ol class="steps">
+            <li><span>Open the <a href="https://start.1password.com/developer-tools/infrastructure-secrets/serviceaccount/?source=dev-portal">service account wizard</a>. The manual path is <strong>Developer → Directory → Other → Create a Service Account</strong>.</span></li>
+            <li><span>Choose a narrow name, such as <code>local-coding-agent</code>.</span></li>
+            <li><span>Select only the dedicated vault. Grant <strong>read items</strong>; add <strong>write items</strong> only if the agent must create or rotate secrets.</span></li>
+            <li><span>Leave “can create vaults” off unless vault creation is part of the automation.</span></li>
+            <li><span>Create the account, then immediately choose <strong>Save in 1Password</strong>. Store the token in a personal vault the service account cannot access.</span></li>
+          </ol>
+          <div class="notice">
+            <strong>The token appears once.</strong>
+            Do not paste it into a prompt, source file, issue, shell profile, or chat. Service-account vault access and permissions are immutable; create a replacement account if the scope must change.
+          </div>
+          <div class="boundary" aria-label="Recommended access split">
+            <div>
+              <h3>Read-only account</h3>
+              <p>Default for builds, tests, deployment reads, and existing API credentials.</p>
+            </div>
+            <div>
+              <h3>Read-write account</h3>
+              <p>Separate token for explicit provisioning or rotation work. Launch it only for that task.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="station" id="shell" aria-labelledby="shell-title">
+        <div class="station-number">Stop 3</div>
+        <div class="station-body">
+          <h2 id="shell-title">Load the token into one shell</h2>
+          <p class="station-summary">The required variable name is <code>OP_SERVICE_ACCOUNT_TOKEN</code>. Use a hidden prompt so the value does not enter shell history.</p>
+          <div class="code-block">
+            <div class="code-head"><span>bash / zsh — current session</span><button class="copy-button" type="button" data-copy="shell-session">Copy</button></div>
+            <pre id="shell-session"><code>read -rsp "1Password service-account token: " OP_SERVICE_ACCOUNT_TOKEN
+export OP_SERVICE_ACCOUNT_TOKEN
+printf '\n'
+op user get --me</code></pre>
+          </div>
+          <p>If <code>op user get --me</code> reports a service account, authentication works. 1Password CLI 2.18.0 or later is required.</p>
+
+          <h3>Launch the agent without writing the token to disk</h3>
+          <p>For a repeatable local launcher, store the service-account token as an item in your personal 1Password vault, then create a non-secret reference file:</p>
+          <div class="code-block">
+            <div class="code-head"><span>.env.agent — safe to version only if the path reveals nothing sensitive</span><button class="copy-button" type="button" data-copy="env-agent">Copy</button></div>
+            <pre id="env-agent"><code>OP_SERVICE_ACCOUNT_TOKEN=op://Private/local-coding-agent/credential</code></pre>
+          </div>
+          <div class="code-block">
+            <div class="code-head"><span>Choose the tool you use</span><button class="copy-button" type="button" data-copy="agent-launchers">Copy</button></div>
+            <pre id="agent-launchers"><code>op run --env-file=.env.agent -- codex
+op run --env-file=.env.agent -- claude
+op run --env-file=.env.agent -- omp</code></pre>
+          </div>
+          <p>Your personal 1Password session resolves the reference for the child process. Inside that process, <code>op</code> authenticates as the restricted service account. Adjust the item path and executable names to your setup.</p>
+          <div class="notice">
+            <strong>Environment variables are not a sandbox.</strong>
+            The launched agent process can access its own token. The protection comes from the service account’s narrow vault scope, not from hiding the variable from that process.
+          </div>
+        </div>
+      </section>
+
+      <section class="station" id="namespace" aria-labelledby="namespace-title">
+        <div class="station-number">Stop 4</div>
+        <div class="station-body">
+          <h2 id="namespace-title">Namespace every secret</h2>
+          <p class="station-summary">Predictable names remove guesswork without revealing secret values.</p>
+          <div class="naming-map" aria-label="Secret title naming convention">
+            <div><span>Project</span><strong>example-app</strong></div>
+            <div><span>Service</span><strong>payments-api</strong></div>
+            <div><span>Environment</span><strong>prod</strong></div>
+          </div>
+          <p>Use the item title <code>&lt;project&gt;/&lt;service&gt;/&lt;environment&gt;</code>. Put values in semantic fields such as <code>credential</code>, <code>username</code>, <code>host</code>, or <code>port</code>.</p>
+          <div class="code-block">
+            <div class="code-head"><span>Example reference — illustrative only</span><button class="copy-button" type="button" data-copy="secret-reference">Copy</button></div>
+            <pre id="secret-reference"><code>op://Agent Automation/example-app/payments-api/prod/credential</code></pre>
+          </div>
+          <p>Add tags that answer operational questions: <code>env:prod</code>, <code>api-key</code>, <code>rotates:quarterly</code>, and an explicit allow-list tag such as <code>agent-safe</code>. A tag is metadata—not access control.</p>
+        </div>
+      </section>
+
+      <section class="station" id="agents" aria-labelledby="agents-title">
+        <div class="station-number">Stop 5</div>
+        <div class="station-body">
+          <h2 id="agents-title">Give the agent a narrow contract</h2>
+          <p class="station-summary">Put this in <code>AGENTS.md</code>, <code>CLAUDE.md</code>, or the equivalent project instruction file.</p>
+          <div class="code-block">
+            <div class="code-head"><span>Reusable agent instructions</span><button class="copy-button" type="button" data-copy="agent-rules">Copy</button></div>
+            <pre id="agent-rules"><code>## Secrets
+
+- Use the `op` CLI. Never ask the user to paste a secret into chat.
+- Access only the vault already authorized for this session.
+- Item titles use: `&lt;project&gt;/&lt;service&gt;/&lt;environment&gt;`.
+- Resolve secret references only when the consuming command runs.
+- Prefer `op run`, `op inject`, or a single `op read` over plaintext files.
+- Never print, log, summarize, or commit secret values.
+- Treat `agent-safe` as an allow-list convention, not access control.
+- Store new credentials as API Credential items with semantic field names.
+- Stop if a requested item is outside the authorized vault or scope.</code></pre>
+          </div>
+          <p>The instruction file improves behavior; the service account enforces the actual boundary. Assume prompts can fail and permissions must still hold.</p>
+        </div>
+      </section>
+
+      <section class="station" id="script" aria-labelledby="script-title">
+        <div class="station-number">Tool</div>
+        <div class="station-body">
+          <h2 id="script-title">Bootstrap one namespaced credential</h2>
+          <p class="station-summary">The web-only steps—creating the service account and saving its one-time token—remain manual. This script validates the restricted session, checks vault access, accepts a secret through hidden input, and creates a namespaced API Credential item without putting its value in argv or shell history.</p>
+          <div class="script-cta">
+            <a class="download" href="./bootstrap-agent-vault.sh" download>Download bootstrap-agent-vault.sh</a>
+            <code>Requires: bash, op, jq</code>
+          </div>
+          <div class="code-block">
+            <div class="code-head"><span>Run it</span><button class="copy-button" type="button" data-copy="script-run">Copy</button></div>
+            <pre id="script-run"><code>chmod +x bootstrap-agent-vault.sh
+./bootstrap-agent-vault.sh \
+  "Agent Automation" \
+  "example-app/payments-api/dev" \
+  "dev"</code></pre>
+          </div>
+          <details>
+            <summary>What the script deliberately does not do</summary>
+            <ul>
+              <li>It does not generate or print a service-account token.</li>
+              <li>It does not broaden vault permissions.</li>
+              <li>It does not put a secret in a command argument.</li>
+              <li>It does not create a vault when the service account cannot see the requested one.</li>
+            </ul>
+          </details>
+        </div>
+      </section>
+    </div>
+
+    <section class="application" id="cj-copy" aria-labelledby="cj-title">
+      <h2 id="cj-title">Commission Junction application copy</h2>
+      <p>This version leads with the editorial strength and business goal. Replace bracketed metrics with verified analytics before submitting; unsupported traffic or demographic claims weaken an application.</p>
+      <div class="application-copy" id="cj-description">
+        <p>I publish original, hands-on guides for software developers, independent builders, and small technical teams adopting secure modern workflows. My strength is turning complex tools into concise, tested tutorials with copy-ready commands, clear security boundaries, and practical use cases. I plan to promote 1Password through evergreen educational content covering password hygiene, service accounts, CLI workflows, secrets management, and safe use with AI coding tools. My goal is to help high-intent readers move from plaintext credentials and improvised environment files to a trusted, repeatable security workflow. The publication reaches an English-language technical audience through organic search, direct sharing, and developer communities, currently generating [MONTHLY UNIQUE VISITORS] monthly unique visitors, with [TOP COUNTRY OR REGION] as the largest verified market and [TOP AUDIENCE PERCENTAGE] of readers in the core software/technology audience. Promotions will use clear affiliate disclosures, original editorial context, and accurate product claims; I will not use misleading incentives, trademark bidding, or copied vendor content.</p>
+      </div>
+      <button class="copy-button" type="button" data-copy="cj-description">Copy description</button>
+      <p class="placeholder-note">Replace all three bracketed fields with current, verifiable figures—or remove that sentence if analytics are not available.</p>
+    </section>
+
+    <section class="sources" id="sources" aria-labelledby="sources-title">
+      <h2 id="sources-title">Primary sources</h2>
+      <ul>
+        <li><a href="https://support.1password.com/create-share-vaults/">Create and share vaults — 1Password Support</a></li>
+        <li><a href="https://www.1password.dev/service-accounts/get-started">Get started with 1Password Service Accounts</a></li>
+        <li><a href="https://www.1password.dev/service-accounts/use-with-1password-cli">Use service accounts with 1Password CLI</a></li>
+        <li><a href="https://www.1password.dev/cli/secrets-scripts">Load secrets into scripts with 1Password CLI</a></li>
+        <li><a href="https://www.1password.dev/cli/reference/management-commands/vault">1Password CLI vault command reference</a></li>
+      </ul>
+      <p>Interface labels and product behavior were checked against these official pages in August 2026. Confirm current account-plan availability and UI labels before using the guide in regulated or production environments.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>A public field guide. Examples are fictional; no account names, vault names, tokens, domains, or infrastructure details from the publisher are included.</p>
+  </footer>
+
+  <script>
+    document.querySelectorAll("[data-copy]").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const target = document.getElementById(button.dataset.copy);
+        if (!target) return;
+        const text = target.innerText.trim();
+        try {
+          await navigator.clipboard.writeText(text);
+          button.dataset.state = "copied";
+          const original = button.textContent;
+          button.textContent = "Copied";
+          window.setTimeout(() => {
+            button.dataset.state = "";
+            button.textContent = original;
+          }, 1800);
+        } catch {
+          button.textContent = "Select text";
+        }
+      });
+    });
+  </script>
+</body>
+</html>
