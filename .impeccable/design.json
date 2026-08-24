@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-24T00:00:00Z",
+  "title": "Design System: Illustrious Technical Field Guides",
+  "extensions": {
+    "colorMeta": {
+      "route-green": { "role": "primary", "displayName": "Route Green", "canonical": "#007a5a" },
+      "transfer-blue": { "role": "secondary", "displayName": "Transfer Blue", "canonical": "#1769e0" },
+      "caution-yellow": { "role": "tertiary", "displayName": "Caution Yellow", "canonical": "#f2c94c" },
+      "station-paper": { "role": "neutral", "displayName": "Station Paper", "canonical": "#f4f7f5" },
+      "signal-ink": { "role": "neutral", "displayName": "Signal Ink", "canonical": "#101613" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Route Display", "purpose": "Wayfinding headlines and labels." },
+      "body": { "displayName": "Guide Text", "purpose": "Long-form operational reading." }
+    },
+    "breakpoints": [
+      { "name": "narrow", "value": "760px" }
+    ]
+  },
+  "components": [],
+  "narrative": {
+    "northStar": "The Visible Route",
+    "overview": "Security and operational setup become a legible sequence. Wayfinding graphics carry real information while code acts as evidence.",
+    "keyCharacteristics": [
+      "Structural color encodes sequence or state.",
+      "Condensed labels pair with hyperlegible reading text.",
+      "Flat ruled surfaces replace decorative card grids."
+    ],
+    "rules": [
+      { "name": "Structural Color", "body": "Route colors encode sequence, transfer, or warning; they do not decorate generic containers.", "section": "colors" },
+      { "name": "Flat by Default", "body": "Use fields, borders, and route geometry instead of ambient shadows.", "section": "elevation" }
+    ],
+    "dos": [
+      "Show the complete operational sequence before the reader scrolls.",
+      "Pair claims with exact commands, source links, or observable boundaries."
+    ],
+    "donts": [
+      "Do not turn instructions into a same-size card grid.",
+      "Do not use terminal styling as shorthand for technical credibility."
+    ]
+  }
+}
