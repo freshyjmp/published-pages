@@ -67,6 +67,11 @@ typography:
     fontSize: "0.9rem"
     fontWeight: 400
     lineHeight: 1.65
+  social-summary:
+    fontFamily: "Guide Text, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "27px"
+    fontWeight: 400
+    lineHeight: 1.28
 spacing:
   compact: "0.75rem"
   standard: "1rem"

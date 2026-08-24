@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1200, initial-scale=1">
+  <title>1Password for coding agents — social card</title>
+  <style>
+    @font-face { font-family: "Route Display"; src: url("./barlow-condensed-700.ttf") format("truetype"); font-weight: 700; }
+    @font-face { font-family: "Guide Text"; src: url("./atkinson-regular.ttf") format("truetype"); font-weight: 400; }
+    @font-face { font-family: "Guide Text"; src: url("./atkinson-bold.ttf") format("truetype"); font-weight: 700; }
+
+    :root {
+      --ink: #17231e;
+      --paper: #f4f7f5;
+      --route: #2f6f5d;
+      --transfer: #365f8d;
+      --muted: #4b5a53;
+      --rule: #cbd5d0;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 1200px; height: 628px; margin: 0; overflow: hidden; }
+    body { color: var(--ink); background: var(--paper); font-family: "Guide Text", sans-serif; }
+    .card { position: relative; display: grid; grid-template-rows: auto 1fr auto; width: 100%; height: 100%; padding: 54px 68px 48px; }
+    .topline, .footer { display: flex; align-items: center; justify-content: space-between; gap: 24px; font: 700 21px/1 "Route Display", sans-serif; letter-spacing: .06em; text-transform: uppercase; }
+    .identity { display: inline-flex; align-items: center; gap: 12px; }
+    .identity::before { content: ""; width: 14px; height: 14px; border: 5px solid var(--ink); border-radius: 50%; background: var(--route); }
+    .format { color: var(--muted); }
+    .main { display: grid; grid-template-columns: 1.5fr .8fr; gap: 70px; align-items: center; }
+    h1 { max-width: 690px; margin: 0; font: 700 92px/.86 "Route Display", sans-serif; letter-spacing: -.025em; text-wrap: balance; }
+    .summary { max-width: 345px; margin: 0; padding-top: 28px; border-top: 2px solid var(--route); color: var(--muted); font-size: 27px; line-height: 1.28; }
+    .summary strong { color: var(--ink); }
+    .route { position: absolute; right: 68px; bottom: 106px; left: 68px; height: 4px; background: var(--route); }
+    .stop { position: absolute; top: -9px; width: 22px; height: 22px; border: 6px solid var(--paper); border-radius: 50%; background: var(--route); box-shadow: 0 0 0 3px var(--route); }
+    .stop:nth-child(1) { left: 0; }
+    .stop:nth-child(2) { left: 25%; }
+    .stop:nth-child(3) { left: 50%; background: var(--transfer); box-shadow: 0 0 0 3px var(--transfer); }
+    .stop:nth-child(4) { left: 75%; }
+    .stop:nth-child(5) { right: 0; }
+    .footer { align-self: end; padding-top: 38px; border-top: 1px solid var(--rule); }
+    .footer span:last-child { color: var(--route); }
+  </style>
+</head>
+<body>
+  <!-- Standard: render at exactly 1200×628 CSS pixels with deviceScaleFactor 1, then capture a PNG viewport screenshot. Keep essential copy inside the 68px safe area. -->
+  <article class="card" aria-label="1Password for coding agents social card">
+    <header class="topline">
+      <span class="identity">Illustrious field guide</span>
+      <span class="format">Five-stop setup</span>
+    </header>
+
+    <div class="main">
+      <h1>1Password for coding agents</h1>
+      <p class="summary">A <strong>least-privileged setup prompt</strong> for Codex, Claude Code, and Oh My Pi.</p>
+    </div>
+
+    <div class="route" aria-hidden="true">
+      <i class="stop"></i><i class="stop"></i><i class="stop"></i><i class="stop"></i><i class="stop"></i>
+    </div>
+
+    <footer class="footer">
+      <span>pages.illustrious.dev</span>
+      <span>Copy prompt → move on</span>
+    </footer>
+  </article>
+</body>
+</html>
