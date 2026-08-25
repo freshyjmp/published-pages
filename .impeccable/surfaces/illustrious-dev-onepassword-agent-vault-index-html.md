@@ -15,4 +15,3 @@ related_targets: []
 - Constraints: No publisher-specific infrastructure, account identifiers, vault names, credentials, or unverifiable claims. Public page; illustrative values only.
 - Direction: Transit wayfinding. One continuous route connects vault, service account, shell, namespace, and agent contract.
 - Memorable moment: The complete security boundary reads as a five-stop line before the visitor scrolls.
-- Unresolved: Commission Junction traffic and demographic metrics must be replaced with verified analytics before submission.

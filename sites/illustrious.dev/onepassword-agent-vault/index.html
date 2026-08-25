@@ -87,21 +87,21 @@
 
     main { width: min(1060px, calc(100% - 2rem)); margin: 0 auto; padding: 4rem 0 5rem; }
     .agent-prompt { margin-bottom: 4rem; padding-bottom: 4rem; border-bottom: 1px solid var(--rule); }
-    .agent-prompt h2, .intro h2, .station h2, .application h2 { margin: 0; font-family: var(--display); font-size: clamp(2.35rem, 4vw, 3.6rem); line-height: .95; letter-spacing: -.02em; text-wrap: balance; }
+    .agent-prompt h2, .intro h2, .station h2 { margin: 0; font-family: var(--display); font-size: clamp(2.35rem, 4vw, 3.6rem); line-height: .95; letter-spacing: -.02em; text-wrap: balance; }
     .agent-prompt > p { max-width: 68ch; margin: .7rem 0 1.5rem; color: var(--muted); }
     .agent-prompt .code-block { max-width: none; }
     .intro { display: grid; grid-template-columns: 1fr 2fr; gap: clamp(2rem, 6vw, 6rem); margin-bottom: 4rem; }
     .intro p { max-width: 66ch; margin: 0; font-size: 1.08rem; }
 
     .route { position: relative; }
-    .route::before { content: ""; position: absolute; top: 1rem; bottom: 0; left: 54px; width: 4px; background: var(--line); }
-    .station { --station-color: var(--line); position: relative; display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3.5rem); padding-bottom: 4.5rem; }
+    .route::before { content: ""; position: absolute; top: .6rem; bottom: 0; left: 8px; width: 4px; background: var(--line); }
+    .station { --station-color: var(--line); position: relative; display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: clamp(1.5rem, 3vw, 3rem); padding-bottom: 4.5rem; }
     .station:nth-child(2) { --station-color: var(--blue); }
     .station:nth-child(3) { --station-color: var(--line); }
     .station:nth-child(4) { --station-color: var(--line); }
     .station:nth-child(5) { --station-color: var(--blue); }
-    .station::before { content: ""; position: absolute; z-index: 2; top: .25rem; left: 42px; width: 16px; height: 16px; border: 6px solid var(--paper); border-radius: 50%; background: var(--station-color); box-shadow: 0 0 0 3px var(--station-color); }
-    .station-number { position: relative; z-index: 3; padding-top: 2.8rem; font-family: var(--display); font-size: .9rem; letter-spacing: .07em; text-align: center; text-transform: uppercase; }
+    .station::before { content: ""; position: absolute; z-index: 2; top: .3rem; left: -4px; width: 16px; height: 16px; border: 6px solid var(--paper); border-radius: 50%; background: var(--station-color); box-shadow: 0 0 0 3px var(--station-color); }
+    .station-number { position: relative; z-index: 3; padding: .5rem 0 0 30px; font-family: var(--display); font-size: .9rem; line-height: 1; letter-spacing: .07em; text-align: left; text-transform: uppercase; white-space: nowrap; }
     .station-body { min-width: 0; }
     .station-body > p, .station-body > ul { max-width: 70ch; }
     .station-body h3 { margin: 2rem 0 .5rem; font-size: 1.3rem; line-height: 1.2; }
@@ -140,13 +140,6 @@
     details { max-width: 880px; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); }
     summary { padding: .8rem 0; font-weight: 700; cursor: pointer; }
 
-    .application { margin-top: 0; padding: 3rem 0; border-top: 2px solid var(--blue); color: var(--ink); background: transparent; }
-    .application h2 { max-width: 800px; }
-    .application > p { max-width: 68ch; color: var(--muted); }
-    .application-copy { margin-top: 1.5rem; padding: 1.4rem; border: 1px solid var(--rule); color: var(--ink); background: white; }
-    .application-copy p { max-width: 72ch; margin: 0; }
-    .application .copy-button { margin-top: 1rem; border-color: var(--ink); color: var(--ink); }
-    .placeholder-note { margin-top: 1rem; color: #735d13; font-size: .95rem; font-weight: 700; }
 
     .sources { margin-top: 3.5rem; padding-top: 2rem; border-top: 1px solid var(--ink); }
     .sources h2 { font: 700 2rem/1 var(--display); }
@@ -163,16 +156,15 @@
       .hero-route::before { width: 560px; }
       main { padding-top: 2.75rem; }
       .intro { gap: 1.2rem; margin-bottom: 3rem; }
-      .route::before { left: 24px; width: 4px; }
-      .station { grid-template-columns: 50px minmax(0, 1fr); gap: 1rem; padding-bottom: 4rem; }
-      .station::before { left: 17px; width: 14px; height: 14px; border-width: 5px; box-shadow: 0 0 0 2px var(--station-color); }
-      .station-number { overflow: hidden; width: 46px; padding-top: 2.35rem; font-size: .8rem; }
+      .route::before { left: 8px; width: 4px; }
+      .station { grid-template-columns: 72px minmax(0, 1fr); gap: 1rem; padding-bottom: 4rem; }
+      .station::before { top: .35rem; left: 0; width: 12px; height: 12px; border-width: 4px; box-shadow: 0 0 0 2px var(--station-color); }
+      .station-number { width: 72px; padding: .5rem 0 0 28px; font-size: .8rem; }
       .boundary { grid-template-columns: 1fr; }
       .naming-map { grid-template-columns: 1fr; }
       .naming-map div { border-right: 0; border-bottom: 2px solid var(--ink); }
       .naming-map div:last-child { border-bottom: 0; }
       pre { font-size: .8rem; }
-      .application { margin-right: 0; margin-left: 0; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -231,7 +223,6 @@
     <a href="#namespace">Namespace</a>
     <a href="#agents">Rules</a>
     <a href="#script">Script</a>
-    <a href="#cj-copy">CJ copy</a>
   </nav>
 
   <main id="main">
@@ -432,15 +423,6 @@ op run --env-file=.env.agent -- omp</code></pre>
       </section>
     </div>
 
-    <section class="application" id="cj-copy" aria-labelledby="cj-title">
-      <h2 id="cj-title">Commission Junction application copy</h2>
-      <p>This version leads with the editorial strength and business goal. Replace bracketed metrics with verified analytics before submitting; unsupported traffic or demographic claims weaken an application.</p>
-      <div class="application-copy" id="cj-description">
-        <p>I publish original, hands-on guides for software developers, independent builders, and small technical teams adopting secure modern workflows. My strength is turning complex tools into concise, tested tutorials with copy-ready commands, clear security boundaries, and practical use cases. I plan to promote 1Password through evergreen educational content covering password hygiene, service accounts, CLI workflows, secrets management, and safe use with AI coding tools. My goal is to help high-intent readers move from plaintext credentials and improvised environment files to a trusted, repeatable security workflow. The publication reaches an English-language technical audience through organic search, direct sharing, and developer communities, currently generating [MONTHLY UNIQUE VISITORS] monthly unique visitors, with [TOP COUNTRY OR REGION] as the largest verified market and [TOP AUDIENCE PERCENTAGE] of readers in the core software/technology audience. Promotions will use clear affiliate disclosures, original editorial context, and accurate product claims; I will not use misleading incentives, trademark bidding, or copied vendor content.</p>
-      </div>
-      <button class="copy-button" type="button" data-copy="cj-description">Copy description</button>
-      <p class="placeholder-note">Replace all three bracketed fields with current, verifiable figures—or remove that sentence if analytics are not available.</p>
-    </section>
 
     <section class="sources" id="sources" aria-labelledby="sources-title">
       <h2 id="sources-title">Primary sources</h2>

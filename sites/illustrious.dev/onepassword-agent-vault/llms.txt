@@ -30,7 +30,7 @@ Recommended workflow:
 
 ## Guide
 
-- [Human-readable setup guide](https://pages.illustrious.dev/onepassword-agent-vault/): Full walkthrough, copyable agent prompt, AGENTS.md policy, and Commission Junction application copy.
+- [Human-readable setup guide](https://pages.illustrious.dev/onepassword-agent-vault/): Full walkthrough, copyable agent prompt, and reusable AGENTS.md policy.
 - [Bootstrap shell script](https://pages.illustrious.dev/onepassword-agent-vault/bootstrap-agent-vault.sh): Validates a service-account session and creates one namespaced API Credential item through hidden input.
 
 ## Primary sources
