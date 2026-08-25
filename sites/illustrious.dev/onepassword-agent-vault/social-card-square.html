@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1200, initial-scale=1">
+  <title>1Password for coding agents — compact social card</title>
+  <style>
+    @font-face { font-family: "Route Display"; src: url("./barlow-condensed-700.ttf") format("truetype"); font-weight: 700; }
+    @font-face { font-family: "Guide Text"; src: url("./atkinson-bold.ttf") format("truetype"); font-weight: 700; }
+
+    :root { --ink: #17231e; --paper: #f4f7f5; --route: #2f6f5d; --transfer: #365f8d; --muted: #4b5a53; --rule: #cbd5d0; }
+    * { box-sizing: border-box; }
+    html, body { width: 1200px; height: 1200px; margin: 0; overflow: hidden; }
+    body { color: var(--ink); background: var(--paper); font-family: "Guide Text", sans-serif; }
+    .card { display: grid; grid-template-rows: auto 1fr auto; width: 100%; height: 100%; padding: 92px; }
+    .topline, .footer { display: flex; align-items: center; justify-content: space-between; gap: 30px; font: 700 30px/1 "Route Display", sans-serif; letter-spacing: .055em; text-transform: uppercase; }
+    .identity { display: inline-flex; align-items: center; gap: 16px; }
+    .identity::before { content: ""; width: 20px; height: 20px; border: 7px solid var(--ink); border-radius: 50%; background: var(--route); }
+    .main { align-self: center; padding-bottom: 46px; }
+    h1 { max-width: 900px; margin: 0; font: 700 132px/.84 "Route Display", sans-serif; letter-spacing: -.025em; text-wrap: balance; }
+    .summary { max-width: 710px; margin: 54px 0 0; padding-top: 34px; border-top: 4px solid var(--route); color: var(--muted); font-size: 38px; line-height: 1.25; }
+    .summary strong { color: var(--ink); }
+    .route { position: relative; height: 6px; margin-bottom: 64px; background: var(--route); }
+    .stop { position: absolute; top: -13px; width: 30px; height: 30px; border: 8px solid var(--paper); border-radius: 50%; background: var(--route); box-shadow: 0 0 0 4px var(--route); }
+    .stop:nth-child(1) { left: 0; }
+    .stop:nth-child(2) { left: 25%; }
+    .stop:nth-child(3) { left: 50%; background: var(--transfer); box-shadow: 0 0 0 4px var(--transfer); }
+    .stop:nth-child(4) { left: 75%; }
+    .stop:nth-child(5) { right: 0; }
+    .footer { padding-top: 38px; border-top: 1px solid var(--rule); }
+    .footer span:last-child { color: var(--route); }
+  </style>
+</head>
+<body>
+  <!-- Standard compact X Summary Card source: render at exactly 1200×1200 CSS pixels with deviceScaleFactor 1, then capture a PNG viewport screenshot. -->
+  <article class="card" aria-label="Compact 1Password for coding agents social card">
+    <header class="topline">
+      <span class="identity">Illustrious field guide</span>
+      <span>Five stops</span>
+    </header>
+
+    <div class="main">
+      <h1>1Password for coding agents</h1>
+      <p class="summary">A <strong>least-privileged setup prompt</strong> you can paste and follow.</p>
+    </div>
+
+    <div>
+      <div class="route" aria-hidden="true"><i class="stop"></i><i class="stop"></i><i class="stop"></i><i class="stop"></i><i class="stop"></i></div>
+      <footer class="footer"><span>pages.illustrious.dev</span><span>Move on →</span></footer>
+    </div>
+  </article>
+</body>
+</html>

@@ -20,11 +20,13 @@ This repository serves small, standalone pages through one Coolify application.
 
 ## Social cards
 
-- Use `social-card.html` as the reproducible source and render it at exactly `1200×628` CSS pixels with device scale factor `1`.
-- Capture the viewport as `social-card.png`; keep essential text and marks at least `68px` from every edge.
-- Store both files beside the page and serve the image from the same public slug. Do not add external object storage for a page-local card.
-- Add Open Graph and `twitter:card=summary_large_image` metadata with an absolute image URL, explicit dimensions, and useful alt text.
-- Verify the PNG is exactly `1200×628`, under `5 MB`, publicly fetchable, and represented by the deployed metadata.
+- Use `social-card.html` as the reproducible Open Graph source and render it at exactly `1200×628` CSS pixels with device scale factor `1`.
+- Capture the wide viewport as `social-card.png`; keep essential text and marks at least `68px` from every edge.
+- For a compact X reply card, add `social-card-square.html`, render `social-card-square.png` at `1200×1200`, and use `twitter:card=summary`. Use `summary_large_image` only when the user wants the large timeline treatment.
+- Store sources and images beside the page and serve them from the same public slug. Do not add external object storage for page-local cards.
+- Add Open Graph and Twitter metadata with absolute image URLs, explicit Open Graph dimensions, and useful alt text.
+- Ensure `Twitterbot` can fetch the page and card assets even when the domain's general crawler policy is restrictive.
+- Verify every PNG has its intended dimensions, is under `5 MB`, publicly fetchable, and matches the deployed metadata.
 
 ## Verification
 

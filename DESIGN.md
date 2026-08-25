@@ -72,6 +72,17 @@ typography:
     fontSize: "27px"
     fontWeight: 400
     lineHeight: 1.28
+  social-square-hero:
+    fontFamily: "Route Display, Arial Narrow, sans-serif"
+    fontSize: "132px"
+    fontWeight: 700
+    lineHeight: 0.84
+    letterSpacing: "-0.025em"
+  social-square-summary:
+    fontFamily: "Guide Text, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "38px"
+    fontWeight: 400
+    lineHeight: 1.25
 spacing:
   compact: "0.75rem"
   standard: "1rem"
