@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0c0d">
+<title>C3 Style Lab</title>
+<style>
+  :root{color-scheme:dark;font-family:"SFMono-Regular",Menlo,Monaco,Consolas,monospace;background:#08090a;color:#ddd9ce}
+  *{box-sizing:border-box} body{margin:0;min-height:100dvh;background:#08090a} button{font:inherit}
+  .lab-head{position:sticky;top:0;z-index:10;padding:max(16px,env(safe-area-inset-top)) 16px 12px;background:#0b0c0d;border-bottom:1px solid #303336}
+  .lab-title{display:flex;justify-content:space-between;align-items:center}.lab-title b{font-size:14px;letter-spacing:.06em}.lab-title span{font-size:10px;color:#737873}
+  .switcher{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:14px}.switcher button{min-height:44px;border:1px solid #34383a;background:#111315;color:#818682;font-size:10px}.switcher button.active{background:#ddd9ce;color:#0b0c0d;border-color:#ddd9ce}
+  .intro{padding:14px 16px;border-bottom:1px solid #222527;color:#858a86;font:11px/1.5 -apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif}.intro strong{color:#ddd9ce}.demo{display:none;min-height:calc(100dvh - 157px)}.demo.active{display:block}.demo-head{height:44px;display:flex;align-items:center;padding:0 14px;border-bottom:1px solid #303336;font-size:10px;letter-spacing:.05em}.demo-head .right{margin-left:auto}.section-label{padding:13px 14px 7px;color:#747974;font-size:9px;letter-spacing:.1em}
+  /* Teletype */
+  #teletype{background:#0c0d0e;color:#d7d3c8}.tt-stat{color:#e1a04b}.tt-row{width:100%;height:58px;display:grid;grid-template-columns:25px 17px 48px minmax(0,1fr) 42px;gap:5px;align-items:center;padding:0 12px;border:0;border-top:1px solid #1e2022;background:transparent;color:inherit;text-align:left;font-size:10px}.tt-row .project{min-width:0}.tt-row .project strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px}.tt-row .project small{display:block;margin-top:5px;color:#737873;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tt-row .age{text-align:right;color:#737873}.tt-row.perm .sig,.tt-row.perm .state{color:#d16464}.tt-row.input .sig,.tt-row.input .state{color:#e1a04b}.tt-row.run .sig,.tt-row.run .state{color:#68a3b5}.tt-row.selected{background:#d7d3c8;color:#0c0d0e}.tt-row.selected *{color:#0c0d0e!important}.tt-detail{display:none;padding:14px;border-top:1px solid #303336;font-size:10px;line-height:1.7}.tt-detail.open{display:block}.terminal{white-space:pre-wrap;color:#a6aaa5}.terminal .dim{color:#666b67}.terminal .warn{color:#e1a04b}.terminal .bad{color:#d16464}.cmdbar{position:sticky;bottom:0;display:flex;gap:13px;padding:12px 14px calc(12px + env(safe-area-inset-bottom));border-top:1px solid #303336;background:#0c0d0e;color:#747974;font-size:9px}.cmdbar b{color:#d7d3c8;font-weight:500}
+  /* Workbench */
+  #workbench{background:#11131a;color:#d8dbe4}.wb-tabs{display:flex;gap:18px;height:42px;align-items:end;padding:0 14px;border-bottom:1px solid #343947;color:#747b8e;font-size:10px}.wb-tabs span{padding-bottom:10px}.wb-tabs .active{color:#c8d8ff;border-bottom:2px solid #7e9ed8}.wb-row{width:100%;min-height:70px;padding:12px 14px;border:0;border-bottom:1px solid #252936;background:transparent;color:inherit;text-align:left}.wb-row.active{background:#202431}.wb-topline{display:flex;align-items:center;gap:8px;font-size:11px}.wb-dot{width:7px;height:7px;background:#667}.wb-dot.red{background:#d56a70}.wb-dot.amber{background:#d9a553}.wb-dot.blue{background:#6c9bc5}.wb-state{margin-left:auto;font-size:9px}.wb-row p{margin:8px 0 0 15px;color:#777e90;font-size:10px}.wb-detail{display:none;padding:14px;border-bottom:1px solid #343947}.wb-detail.open{display:block}.wb-detail h2{font-size:12px;margin:0}.wb-detail small{display:block;color:#777e90;margin-top:6px}.wb-screen{margin-top:14px;padding-top:12px;border-top:1px solid #343947;white-space:pre-wrap;font-size:10px;line-height:1.7;color:#aeb4c2}.wb-foot{position:sticky;bottom:0;display:flex;gap:14px;padding:12px 14px calc(12px + env(safe-area-inset-bottom));border-top:1px solid #343947;background:#11131a;color:#747b8e;font-size:9px}.wb-foot b{color:#c8d8ff;font-weight:500}
+  /* Strips */
+  #strips{background:#171819;color:#e5e1d8}.fs-stats b{color:#dea258}.strip{width:calc(100% - 24px);min-height:82px;margin:0 12px 8px;display:grid;grid-template-columns:46px 84px minmax(0,1fr);border:0;border-left:7px solid #6f7571;background:#d7d1c2;color:#161718;text-align:left}.strip.perm{border-left-color:#bb5757}.strip.input{border-left-color:#d1933e}.strip.run{border-left-color:#5f96a8}.strip-cell{padding:10px 9px;border-right:1px solid #9a968c;min-width:0}.strip-cell:last-child{border-right:0}.strip .num{font-size:20px;font-weight:800}.strip .state{font-size:8px;font-weight:800}.strip .time{font-size:8px;margin-top:7px}.strip .project{font-size:11px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.strip .task{font-size:9px;margin-top:8px;line-height:1.35}.fs-detail{display:none;margin:12px;padding:13px;border:1px solid #4b4e4b}.fs-detail.open{display:block}.fs-detail h2{font-size:11px;margin:0}.fs-detail small{display:block;color:#8a8e89;margin-top:6px}.fs-screen{margin-top:14px;padding:12px 0;border-top:1px solid #454846;white-space:pre-wrap;font-size:9px;line-height:1.7;color:#b8bbb6}.actions{display:flex;gap:6px;margin-top:14px}.actions button{min-height:44px;padding:0 10px;border:1px solid #535653;background:transparent;color:#dedbd3;font-size:9px}.actions .primary{background:#d7d1c2;color:#171819;border-color:#d7d1c2}
+  .desktop-link{display:block;margin:18px 14px 26px;color:#8daaba;font:11px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif}
+  @media(min-width:760px){body{max-width:520px;margin:0 auto;border-left:1px solid #252729;border-right:1px solid #252729}.lab-head{max-width:520px}.demo{min-height:700px}}
+</style>
+</head>
+<body>
+<header class="lab-head"><div class="lab-title"><b>C3 STYLE LAB</b><span>PUBLIC DEMO</span></div><nav class="switcher" aria-label="Design direction"><button class="active" data-demo="teletype">01 / DISPATCH</button><button data-demo="workbench">02 / WORKBENCH</button><button data-demo="strips">03 / STRIPS</button></nav></header>
+<div class="intro"><strong>Tap a session in each direction.</strong> These are responsive sketches—not production screens. Compare hierarchy, density, selection, and terminal treatment.</div>
+<main>
+<section id="teletype" class="demo active"><div class="demo-head"><b>C3 // REMOTE</b><span class="right"><span class="tt-stat">3 WAITING</span> / 31</span></div><div class="section-label">QUEUE / ATTENTION</div>
+<button class="tt-row perm selected" data-detail="tt-detail"><span>01</span><span class="sig">!</span><span class="state">PERM</span><span class="project"><strong>c3 / remote access</strong><small>Add terminal navigation keys</small></span><span class="age">00:42</span></button>
+<button class="tt-row input" data-detail="tt-detail"><span>02</span><span class="sig">?</span><span class="state">INPUT</span><span class="project"><strong>iwillbe</strong><small>Choose App Store assets</small></span><span class="age">03:11</span></button>
+<button class="tt-row run" data-detail="tt-detail"><span>03</span><span class="sig">&gt;</span><span class="state">RUN</span><span class="project"><strong>emergency-gigachad</strong><small>Render editing timeline</small></span><span class="age">00:09</span></button>
+<div id="tt-detail" class="tt-detail open"><div>SESSION / TMUX 0:22.0</div><div class="terminal"><span class="dim">13:41:54</span>  GET /api/dashboard  200
+<span class="dim">13:41:57</span>  key sequence validated
+
+<span class="warn">terminal dialogue</span>
+  first option
+  second option
+&gt; third option
+
+<span class="bad">Confirm selection?</span>  [enter]</div></div><div class="cmdbar"><span><b>j/k</b> move</span><span><b>↵</b> inspect</span><span><b>r</b> respond</span><span><b>/</b> search</span></div><a class="desktop-link" href="./desktop.html">Open the original desktop-sized comparison →</a></section>
+<section id="workbench" class="demo"><div class="demo-head"><b>C3</b><span class="right">31 agents · 4 waiting</span></div><div class="wb-tabs"><span class="active">Attention</span><span>Groups</span><span>Recent</span></div>
+<button class="wb-row active" data-detail="wb-detail"><div class="wb-topline"><i class="wb-dot red"></i><strong>c3</strong><span class="wb-state" style="color:#d56a70">PERMISSION</span></div><p>Add terminal navigation keys</p></button>
+<button class="wb-row" data-detail="wb-detail"><div class="wb-topline"><i class="wb-dot amber"></i><strong>iwillbe</strong><span class="wb-state" style="color:#d9a553">INPUT</span></div><p>Choose App Store assets</p></button>
+<button class="wb-row" data-detail="wb-detail"><div class="wb-topline"><i class="wb-dot blue"></i><strong>pufferlib</strong><span class="wb-state" style="color:#6c9bc5">WORKING</span></div><p>Train autonomous drone policy</p></button>
+<div id="wb-detail" class="wb-detail open"><h2>Add terminal navigation keys</h2><small>c3 · omp · ~/code/carmelo-command-center/c3</small><div class="wb-screen">13:41:54 GET /api/dashboard 200
+13:41:57 key sequence validated
+
+✓ Project matched
+✓ Seven keys allowlisted
+
+Use ↓ ↓ ENTER to choose option three.</div></div><div class="wb-foot"><span><b>j/k</b> navigate</span><span><b>enter</b> open</span><span><b>n</b> new</span><span><b>?</b> help</span></div><a class="desktop-link" href="./desktop.html">Open the original desktop-sized comparison →</a></section>
+<section id="strips" class="demo"><div class="demo-head"><b>C3 / DISPATCH</b><span class="right fs-stats"><b>4</b> waiting</span></div><div class="section-label">REQUIRES OPERATOR</div>
+<button class="strip perm" data-detail="fs-detail"><span class="strip-cell"><span class="num">01</span></span><span class="strip-cell"><span class="state">PERMISSION</span><span class="time">00:42</span></span><span class="strip-cell"><span class="project">c3</span><span class="task">Add terminal navigation keys</span></span></button>
+<button class="strip input" data-detail="fs-detail"><span class="strip-cell"><span class="num">02</span></span><span class="strip-cell"><span class="state">NEEDS INPUT</span><span class="time">03:11</span></span><span class="strip-cell"><span class="project">iwillbe</span><span class="task">Choose App Store assets</span></span></button><div class="section-label">IN PROGRESS</div>
+<button class="strip run" data-detail="fs-detail"><span class="strip-cell"><span class="num">03</span></span><span class="strip-cell"><span class="state">WORKING</span><span class="time">00:09</span></span><span class="strip-cell"><span class="project">pufferlib</span><span class="task">Train drone policy</span></span></button>
+<div id="fs-detail" class="fs-detail open"><h2>01 / C3 / PERMISSION</h2><small>~/code/carmelo-command-center/c3</small><div class="fs-screen">13:41:57 key sequence validated
+
+Permission required to edit:
+src-tauri/src/remote_server.rs</div><div class="actions"><button class="primary">Inspect</button><button>Focus pane</button><button>Respond</button></div></div><a class="desktop-link" href="./desktop.html">Open the original desktop-sized comparison →</a></section>
+</main>
+<script>
+const tabs=[...document.querySelectorAll('[data-demo]')];
+tabs.forEach(tab=>tab.addEventListener('click',()=>{tabs.forEach(x=>x.classList.toggle('active',x===tab));document.querySelectorAll('.demo').forEach(section=>section.classList.toggle('active',section.id===tab.dataset.demo));window.scrollTo({top:0,behavior:'instant'});}));
+document.querySelectorAll('[data-detail]').forEach(row=>row.addEventListener('click',()=>{const section=row.closest('.demo');section.querySelectorAll('[data-detail]').forEach(item=>item.classList.toggle('selected',item===row));const detail=document.getElementById(row.dataset.detail);detail.classList.toggle('open');}));
+</script>
+</body>
+</html>
