@@ -177,3 +177,15 @@ A route is semantic structure. Every stop must correspond to a real ordered boun
 - **Don't** turn instructions into a grid of same-size cards.
 - **Don't** use terminal green, monospace, or dark mode as shorthand for technical credibility.
 - **Don't** let code, URLs, or secret references force page-level horizontal overflow.
+
+## Agency deployment service surface
+
+`sites/illustrious.dev/agency-devops/index.html` extends this world in Persuade mode. Its companion `launch-plan.html` is Read mode. The client-facing page leads with the agency offer, a three-stage scope/implementation/handoff route, and an email-first action. Service deliverables use ruled rows rather than a card grid.
+
+The surface retains Route Display, Guide Text, Station Paper, Route Green, Transfer Blue and Header Ink. Its desktop container is 1120px; the public plan uses an 800px reading column. Below 760px the service layout becomes a single column, while the form's paired fields also stack.
+
+Page-specific type adjustments are intentional: 1.125rem body copy, 1rem form/helper copy, a desktop hero spanning 3.3–5.6rem, a mobile hero spanning 3.3–5rem, and a 2rem mobile route title. These are local fit adjustments, not changes to the field-guide defaults above.
+
+The brief builder prepares a visible email draft without uploading or storing input. It requires a non-whitespace problem description, encodes the draft in a mailto link, hides stale drafts when inputs change, and offers explicit clipboard-failure recovery. The direct business email remains usable without JavaScript. Do not style this as a submitted lead or imply delivery before the visitor sends an email.
+
+Public content distinguishes an illustrative project scope and a technical-writing sample from customer proof. No testimonials, success metrics, fixed commercial prices, uptime guarantees or availability promises are invented. Prospect records and individual outreach drafts do not belong in this public repository.
