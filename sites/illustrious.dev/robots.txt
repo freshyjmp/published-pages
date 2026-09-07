@@ -4,4 +4,3 @@ Allow: /
 User-agent: *
 Disallow: /
 Allow: /agency-devops/
-Disallow: /agency-devops/launch-plan.html
