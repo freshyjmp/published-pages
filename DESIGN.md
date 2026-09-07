@@ -178,14 +178,14 @@ A route is semantic structure. Every stop must correspond to a real ordered boun
 - **Don't** use terminal green, monospace, or dark mode as shorthand for technical credibility.
 - **Don't** let code, URLs, or secret references force page-level horizontal overflow.
 
-## Agency deployment service surface
+## Deployment service surface
 
-`sites/illustrious.dev/agency-devops/index.html` extends this world in Persuade mode. Its companion `launch-plan.html` is Read mode. The client-facing page leads with the agency offer, a three-stage scope/implementation/handoff route, and an email-first action. Service deliverables use ruled rows rather than a card grid.
+`sites/illustrious.dev/agency-devops/index.html` is a Persuade surface with an explicitly user-selected visual authority: the Illustrious homepage. Its stable URL is retained, but its audience is small software teams rather than exclusively agencies. Do not apply the field-guide visual world to this landing page.
 
-The surface retains Route Display, Guide Text, Station Paper, Route Green, Transfer Blue and Header Ink. Its desktop container is 1120px; the public plan uses an 800px reading column. Below 760px the service layout becomes a single column, while the form's paired fields also stack.
+Reuse the homepage's Libre Franklin variable normal and italic fonts, Spline Sans Mono for restrained section labels, `#fafafa` background, `#111827` headings, `#4b5563` body copy, `#6b7280` secondary copy, `#e5e7eb` dividers and pill actions. The 692px outer column has 24px horizontal padding; top/bottom spacing is 64px mobile and 96px desktop. Headlines are 36px mobile and 48px desktop, weight 600, with true italic emphasis. Reuse the homepage logo and favicon. Labels are darkened relative to the original homepage for legibility.
 
-Page-specific type adjustments are intentional: 1.125rem body copy, 1rem form/helper copy, a desktop hero spanning 3.3–5.6rem, a mobile hero spanning 3.3–5rem, and a 2rem mobile route title. These are local fit adjustments, not changes to the field-guide defaults above.
+The page is a single reading column: offer, service rows, illustrative scope in native details, three ordered engagement steps, operator context and contact. Direct email is the primary action; the optional structured brief lives in a native disclosure. Form fields pair above 640px. Motion is a brief, already-visible positional entrance with reduced-motion support.
 
-The brief builder prepares a visible email draft without uploading or storing input. It requires a non-whitespace problem description, encodes the draft in a mailto link, hides stale drafts when inputs change, and offers explicit clipboard-failure recovery. The direct business email remains usable without JavaScript. Do not style this as a submitted lead or imply delivery before the visitor sends an email.
+The brief builder never uploads or stores input. It rejects whitespace-only problems, encodes mailto text, hides stale drafts on edits and exposes clipboard-failure recovery. Both builder and form remain hidden until handlers register. Fields have no names, preventing accidental serialization without JavaScript; the direct business inbox remains accessible.
 
-Public content distinguishes an illustrative project scope and a technical-writing sample from customer proof. No testimonials, success metrics, fixed commercial prices, uptime guarantees or availability promises are invented. Prospect records and individual outreach drafts do not belong in this public repository.
+The companion launch plan remains Read mode. Public examples are labeled illustrative and the technical writing sample is not represented as a customer result. No invented customers, success metrics, fixed prices, guarantees or availability claims. Prospect records, source assessments and outreach drafts remain local, outside this public repository.
