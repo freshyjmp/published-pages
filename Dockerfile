@@ -1,4 +1,4 @@
-FROM nginx:1.28-alpine
+FROM nginx:1.30-alpine
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY sites/ /srv/pages/
